@@ -357,6 +357,18 @@
                 overflow-x: auto;
             }
         }
+        .menu-item a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.btn {
+    text-decoration: none;
+    display: inline-block;
+}
     </style>
 </head>
 <body>
@@ -369,15 +381,11 @@
             <div class="menu">
                 <div class="menu-item active">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>My Profile</span>
+                    <a href="{% url 'dashboard1' %}">Dashboard</span>
                 </div>
                 <div class="menu-item">
                     <i class="fas fa-calendar-check"></i>
-                    <a href="{% url 'employee_dashboard' %}"></a>
+                    <a href="{% url 'employee_dashboard' %}">Attendance</a>
                 </div>
                 <div class="menu-item">
                     <i class="fas fa-money-bill-wave"></i>
@@ -396,10 +404,10 @@
             <div class="header">
                 <h1>Employee Dashboard</h1>
                 <div class="user-info">
-                    <img src="https://ui-avatars.com/api/?name=Rahul+Sharma&background=4a6de5&color=fff" alt="Rahul Sharma">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Employee">
                     <div>
-                        <h3>Rahul Sharma</h3>
-                        <p>Software Developer</p>
+                        <h3>{{ username }}</h3>
+                        <p>{{ detail.position }}</p>
                     </div>
                 </div>
             </div>
@@ -432,40 +440,35 @@
             <div class="content-section">
                 <div class="section-header">
                     <h2><i class="fas fa-user"></i> My Profile</h2>
-                    <button class="btn">Edit Profile</button>
                 </div>
                 
                 <div class="profile-info">
                     <div class="profile-img">
-                        <img src="https://ui-avatars.com/api/?name=Rahul+Sharma&background=4a6de5&color=fff&size=150" alt="Rahul Sharma">
-                        <h3>Rahul Sharma</h3>
-                        <p>Software Developer</p>
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Rahul Sharma">
+                        <h3>{{ detail.name }}</h3>
+                        <p>{{ detail.position }}</p>
                     </div>
                     
                     <div class="profile-details">
                         <div class="detail-item">
                             <label>Employee ID</label>
-                            <span>EMP-10257</span>
+                            <span>{{ detail.employee_id }}</span>
                         </div>
                         <div class="detail-item">
                             <label>Email</label>
-                            <span>rahul.sharma@example.com</span>
+                            <span>{{ detail.email }}</span>
                         </div>
                         <div class="detail-item">
                             <label>Phone</label>
-                            <span>+91 9876543210</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Department</label>
-                            <span>Engineering</span>
+                            <span>+91 {{ detail.phone }}</span>
                         </div>
                         <div class="detail-item">
                             <label>Join Date</label>
-                            <span>March 15, 2021</span>
+                            <span>{{ detail.date_of_joining }}</span>
                         </div>
                         <div class="detail-item">
                             <label>Location</label>
-                            <span>Bangalore, India</span>
+                            <span>{{ detail.address }}, {{ detail.city }}, {{ detail.state }} - {{ detail.state_code }}, {{ detail.country }}</span>
                         </div>
                     </div>
                 </div>

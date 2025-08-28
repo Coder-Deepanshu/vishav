@@ -343,6 +343,18 @@
                 overflow-x: auto;
             }
         }
+        .menu-item a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.btn {
+    text-decoration: none;
+    display: inline-block;
+}
     </style>
 </head>
 <body>
@@ -355,7 +367,7 @@
             <div class="menu">
                 <div class="menu-item active">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
                 </div>
                 {% if password == 'AD20250' %}
                 <div class="menu-item">
@@ -368,20 +380,12 @@
                     <a href="{% url 'employee_list' %}">Manage Employee</a>
                 </div>
                 <div class="menu-item">
-                    <i class="fas fa-user-cog"></i>
-                    <span>Admins</span>
-                </div>
-                <div class="menu-item">
                     <i class="fas fa-calendar-check"></i>
                     <a href="{% url 'admin_dashboard' %}">Attendance</a>
                 </div>
                 <div class="menu-item">
                     <i class="fas fa-money-bill-wave"></i>
                     <span>Salary</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
                 </div>
                 <div class="menu-item">
                     <i class="fas fa-sign-out-alt"></i>
@@ -396,10 +400,10 @@
             <div class="header">
                 <h1>Employee Management Dashboard</h1>
                 <div class="user-info">
-                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4a6de5&color=fff" alt="Admin User">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin User">
                     <div>
                         <h3>{{ username }}</h3>
-                        <p>Administrator</p>
+                        <p>{{ detail.position }}</p>
                     </div>
                 </div>
             </div>
@@ -501,145 +505,6 @@
         </div>
     </div>
     
-    <!-- Add Employee Modal -->
-    <div id="addEmployeeModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Employee</h2>
-                <span class="close" onclick="closeModal('addEmployeeModal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="empName">Full Name</label>
-                <input type="text" id="empName" placeholder="Enter employee name">
-            </div>
-            <div class="form-group">
-                <label for="empEmail">Email Address</label>
-                <input type="email" id="empEmail" placeholder="Enter employee email">
-            </div>
-            <div class="form-group">
-                <label for="empPosition">Position</label>
-                <input type="text" id="empPosition" placeholder="Enter employee position">
-            </div>
-            <div class="form-group">
-                <label for="empDepartment">Department</label>
-                <select id="empDepartment">
-                    <option value="">Select Department</option>
-                    <option value="hr">Human Resources</option>
-                    <option value="it">Information Technology</option>
-                    <option value="finance">Finance</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="operations">Operations</option>
-                </select>
-            </div>
-            <button class="btn" onclick="addEmployee()">Add Employee</button>
-        </div>
-    </div>
-    
-    <!-- Add Admin Modal -->
-    <div id="addAdminModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Admin</h2>
-                <span class="close" onclick="closeModal('addAdminModal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="adminName">Full Name</label>
-                <input type="text" id="adminName" placeholder="Enter admin name">
-            </div>
-            <div class="form-group">
-                <label for="adminEmail">Email Address</label>
-                <input type="email" id="adminEmail" placeholder="Enter admin email">
-            </div>
-            <div class="form-group">
-                <label for="adminRole">Admin Role</label>
-                <select id="adminRole">
-                    <option value="">Select Admin Role</option>
-                    <option value="super">Super Administrator</option>
-                    <option value="hr">HR Administrator</option>
-                    <option value="finance">Finance Administrator</option>
-                    <option value="general">General Administrator</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="adminPassword">Password</label>
-                <input type="password" id="adminPassword" placeholder="Set a password">
-            </div>
-            <button class="btn" onclick="addAdmin()">Add Admin</button>
-        </div>
-    </div>
-    
-    <!-- Mark Attendance Modal -->
-    <div id="markAttendanceModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Mark Attendance</h2>
-                <span class="close" onclick="closeModal('markAttendanceModal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="attendanceDate">Date</label>
-                <input type="date" id="attendanceDate">
-            </div>
-            <div class="form-group">
-                <label for="attendanceEmp">Employee</label>
-                <select id="attendanceEmp">
-                    <option value="">Select Employee</option>
-                    <option value="emp1025">John Smith (EMP-1025)</option>
-                    <option value="emp1037">Sarah Johnson (EMP-1037)</option>
-                    <option value="emp1012">Michael Brown (EMP-1012)</option>
-                    <option value="emp1044">Emily Davis (EMP-1044)</option>
-                    <option value="emp1008">Robert Wilson (EMP-1008)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="attendanceStatus">Status</label>
-                <select id="attendanceStatus">
-                    <option value="present">Present</option>
-                    <option value="absent">Absent</option>
-                    <option value="late">Late</option>
-                    <option value="halfday">Half Day</option>
-                </select>
-            </div>
-            <button class="btn" onclick="markAttendance()">Mark Attendance</button>
-        </div>
-    </div>
-    
-    <!-- Set Salary Modal -->
-    <div id="setSalaryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Set Employee Salary</h2>
-                <span class="close" onclick="closeModal('setSalaryModal')">&times;</span>
-            </div>
-            <div class="form-group">
-                <label for="salaryEmp">Employee</label>
-                <select id="salaryEmp">
-                    <option value="">Select Employee</option>
-                    <option value="emp1025">John Smith (EMP-1025)</option>
-                    <option value="emp1037">Sarah Johnson (EMP-1037)</option>
-                    <option value="emp1012">Michael Brown (EMP-1012)</option>
-                    <option value="emp1044">Emily Davis (EMP-1044)</option>
-                    <option value="emp1008">Robert Wilson (EMP-1008)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="salaryAmount">Salary Amount ($)</label>
-                <input type="number" id="salaryAmount" placeholder="Enter salary amount">
-            </div>
-            <div class="form-group">
-                <label for="salaryPeriod">Payment Period</label>
-                <select id="salaryPeriod">
-                    <option value="monthly">Monthly</option>
-                    <option value="biweekly">Bi-Weekly</option>
-                    <option value="weekly">Weekly</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="salaryEffective">Effective Date</label>
-                <input type="date" id="salaryEffective">
-            </div>
-            <button class="btn" onclick="setSalary()">Set Salary</button>
-        </div>
-    </div>
 
     <script>
         // Modal functions

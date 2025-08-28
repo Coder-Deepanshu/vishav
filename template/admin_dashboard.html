@@ -255,20 +255,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for employee in employees %}
+                    {% for data in employee_data %}
                     <tr>
-                        <td>{{ employee.employee_id }}</td>
-                        <td>{{ employee.name }}</td>
-                        <td>{{ employee.position }}</td>
+                        <td>{{ data.employee.employee_id }}</td>
+                        <td>{{ data.employee.name }}</td>
+                        <td>{{ data.employee.position }}</td>
                         <td>
-                            <span class="status-badge status-{{ today_attendance|get_item:employee.employee_id|lower|cut:' ' }}">
-                                {{ today_attendance|get_item:employee.employee_id }}
+                            <span class="status-badge status-{{ data.status_class }}">
+                                {{ data.status }}
                             </span>
                         </td>
                         <td>
                             <form class="attendance-form" method="POST" action="{% url 'mark_attendance' %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="employee_id" value="{{ employee.employee_id }}">
+                                <input type="hidden" name="employee_id" value="{{ data.employee.employee_id }}">
                                 <select name="status" class="attendance-select" required>
                                     <option value="present">Present</option>
                                     <option value="absent">Absent</option>
@@ -285,14 +285,5 @@
             </table>
         </div>
     </div>
-
-    <!-- Custom template filter for dictionary lookup -->
-    <script>
-        // This is a simple way to handle dictionary lookup in templates
-        // For production, you should create a custom template filter
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add any necessary JavaScript here
-        });
-    </script>
 </body>
 </html>

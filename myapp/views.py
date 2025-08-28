@@ -14,13 +14,13 @@ def login(request):
             if username == 'Vishav' and password == 'AD20250':
                 request.session['username'] = username
                 request.session['adminid'] = password
-                return render(request,'dashboard.html',{'username':username,'password':password})
+                return render(request,'dashboard.html',{'username':username,'password':password })
             elif username in admin_username:
                 if password in admin_password:
                     admin = Admin.objects.get(username = username)
                     request.session['username'] = admin.name
                     request.session['adminid'] = admin.admin_id
-                    return render(request,'dashboard.html',{'username':admin.name})
+                    return render(request,'dashboard.html',{'username':admin.name,'detail':admin})
                 else:
                     messages.error(request, "Invalid admin credentials")
             else:
@@ -39,7 +39,7 @@ def login(request):
                   employee = Employee.objects.get(username = username)
                   request.session['username1'] = employee.name
                   request.session['employeeid'] = employee.employee_id
-                  return render(request,'dashboard1.html')
+                  return render(request,'dashboard1.html',{'username':employee.name,'detail':employee})
                 else:
                     messages.error(request, "Invalid admin credentials")
                 return redirect('login')
@@ -484,6 +484,14 @@ def dashboard(request):
 
 
 from .models import Attendance
+# Helper function for getting attendance status
+def get_attendance_status(attendance_dict, employee_id):
+    return attendance_dict.get(employee_id, 'Not Marked')
+
+# Helper function for formatting status class
+def format_status_class(status):
+    return status.lower().replace(' ', '_')
+
 def admin_dashboard(request):
     if 'adminid' not in request.session:
         return redirect('login')
@@ -500,9 +508,19 @@ def admin_dashboard(request):
         except Attendance.DoesNotExist:
             today_attendance[employee.employee_id] = 'Not Marked'
     
+    # Prepare employee data with status
+    employee_data = []
+    for employee in employees:
+        status = get_attendance_status(today_attendance, employee.employee_id)
+        status_class = format_status_class(status)
+        employee_data.append({
+            'employee': employee,
+            'status': status,
+            'status_class': status_class
+        })
+    
     context = {
-        'employees': employees,
-        'today_attendance': today_attendance,
+        'employee_data': employee_data,
         'today': today
     }
     return render(request, 'admin_dashboard.html', context)
@@ -572,6 +590,7 @@ def employee_dashboard(request):
         context = {
             'employee': employee,
             'attendance_records': attendance_records,
+            'current_date': today,
             'stats': {
                 'total_days': total_days,
                 'present_days': present_days,
@@ -585,7 +604,3 @@ def employee_dashboard(request):
     except Employee.DoesNotExist:
         messages.error(request, "Employee not found")
         return redirect('login')
-
-def logout(request):
-    request.session.flush()
-    return redirect('login')
