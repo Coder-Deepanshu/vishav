@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Employee - {{ employee.name }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #dc3545;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+        }
+        
+        .delete-content {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .warning-icon {
+            font-size: 60px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        
+        .employee-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 120px;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #bd2130;
+        }
+        
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .cancel-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'employee_admin' admin.id %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <h1>Delete Admin</h1>
+            <p>Confirm deletion of admin record</p>
+        </div>
+        
+        <div class="delete-content">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            
+            <h2>Are you sure you want to delete this admin?</h2>
+            <p>This action cannot be undone. All information for this admin will be permanently removed from the system.</p>
+            
+            <div class="employee-info">
+                <div class="info-item">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">{{ admin.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Employee ID:</span>
+                    <span class="info-value">{{ admin.employee_id }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Position:</span>
+                    <span class="info-value">{{ admin.position }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ admin.email }}</span>
+                </div>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="action-buttons">
+                    <a href="{% url 'admin_detail' admin.id %}" class="action-btn cancel-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="action-btn delete-btn">
+                        <i class="fas fa-trash"></i> Confirm Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

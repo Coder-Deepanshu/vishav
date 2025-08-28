@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details - {{ employee.name }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4a6de5;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+        }
+        
+        .employee-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        .profile-section {
+            text-align: center;
+        }
+        
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+        
+        .default-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #4a6de5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 60px;
+            border: 5px solid #f0f0f0;
+        }
+        
+        .employee-id {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a6de5;
+            margin-bottom: 5px;
+        }
+        
+        .employee-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .employee-position {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .detail-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .detail-card h3 {
+            color: #4a6de5;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-card h3 i {
+            margin-right: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .info-item {
+            margin-bottom: 12px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .edit-btn {
+            background: #4a6de5;
+            color: white;
+            border: none;
+        }
+        
+        .edit-btn:hover {
+            background: #3a5bd0;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+        
+        .delete-btn:hover {
+            background: #bd2130;
+        }
+        
+        .full-width {
+            grid-column: 1 / span 2;
+        }
+        
+        @media (max-width: 768px) {
+            .employee-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-width {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'employee_list' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+            <h1>Employee Details</h1>
+            <p>Complete information about the employee</p>
+        </div>
+        
+        <div class="employee-content">
+            <div class="profile-section">
+                <div class="default-img">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="employee-id">ID: {{ employee.employee_id }}</div>
+                <div class="employee-name">{{ employee.name }}</div>
+                <div class="employee-position">{{ employee.position }}</div>
+                
+                <div class="action-buttons">
+                    <a href="{% url 'edit_employee' employee.id %}" class="action-btn edit-btn">
+                   <i class="fas fa-edit"></i> Edit
+                  </a>
+                    <form action="{% url 'delete_employee' employee.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this employee?')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="details-section">
+                <div class="detail-card">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value">{{ employee.name }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ employee.email }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Father's Name</div>
+                            <div class="info-value">{{ employee.father_name }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mother's Name</div>
+                            <div class="info-value">{{ employee.mother_name }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Position</div>
+                            <div class="info-value">{{ employee.position }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Qualification</div>
+                            <div class="info-value">{{ employee.qualification }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Experience</div>
+                            <div class="info-value">{{ employee.experience }} years</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Date of Joining</div>
+                            <div class="info-value">{{ employee.date_of_joining }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3><i class="fas fa-address-card"></i> Contact Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value">{{ employee.phone }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Other Phone</div>
+                            <div class="info-value">{{ employee.other_phone_no|default:"-" }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value">{{ employee.get_gender_display }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Birthday</div>
+                            <div class="info-value">{{ employee.birthday }}</div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">{{ employee.address }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">City</div>
+                            <div class="info-value">{{ employee.city }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">State</div>
+                            <div class="info-value">{{ employee.state }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">State Code</div>
+                            <div class="info-value">{{ employee.state_code|default:"-" }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Country</div>
+                            <div class="info-value">{{ employee.country }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3><i class="fas fa-id-card"></i> Additional Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Category</div>
+                            <div class="info-value">{{ employee.get_category_display }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Nationality</div>
+                            <div class="info-value">{{ employee.get_nationality_display }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Religion</div>
+                            <div class="info-value">{{ employee.get_religion_display }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Aadhar Number</div>
+                            <div class="info-value">{{ employee.adhar_no }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">PAN Number</div>
+                            <div class="info-value">{{ employee.pan_no }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Marital Status</div>
+                            <div class="info-value">{{ employee.get_martial_status_display }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to confirm delete action
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this employee?');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4a6de5;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: var(--progress-width, 0%);
+            height: 4px;
+            background: #4a6de5;
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+        
+        .step {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #555;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .step.active {
+            background: #4a6de5;
+            color: white;
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .step-titles {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a6de5;
+            width: 33%;
+            text-align: center;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group.full-width {
+            grid-column: 1 / span 2;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #4a6de5;
+            box-shadow: 0 0 0 2px rgba(74, 109, 229, 0.2);
+        }
+        
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            color: #777;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            background: #4a6de5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn:hover {
+            background: #3a5bd0;
+        }
+        
+        .btn-prev {
+            background: #6c757d;
+        }
+        
+        .btn-prev:hover {
+            background: #5a6268;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .required::after {
+            content: '*';
+            color: #e22;
+            margin-left: 4px;
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-error {
+            background-color: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+        
+        .alert-success {
+            background-color: #efe;
+            color: #363;
+            border: 1px solid #cfc;
+        }
+        
+        .alert i {
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group.full-width {
+                grid-column: 1;
+            }
+            
+            .step-title {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Admin Registration</h1>
+            <p>Add new admin to the system</p>
+        </div>
+        
+        <div class="form-container">
+            <!-- Messages display -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                    <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                    <div class="step active" id="step1">
+                        1
+                        <span class="step-label">Basic Info</span>
+                    </div>
+                    <div class="step" id="step2">
+                        2
+                        <span class="step-label">Contact Info</span>
+                    </div>
+                    <div class="step" id="step3">
+                        3
+                        <span class="step-label">Additional Info</span>
+                    </div>
+                </div>
+                
+                <div class="step-titles">
+                    <div class="step-title">Basic Information</div>
+                    <div class="step-title">Contact Details</div>
+                    <div class="step-title">Additional Data</div>
+                </div>
+            </div>
+            
+            <form id="employee-form" method="POST" action="{% url 'add_admin' %}">
+                {% csrf_token %}
+                
+                <!-- Step 1: Basic Information -->
+                <div class="form-step active" id="form-step-1">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="name" class="required">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="email" class="required">Email</label>
+                            <input type="email" id="email" name="email" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="father_name" class="required">Father's Name</label>
+                            <input type="text" id="father_name" name="father_name" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="mother_name" class="required">Mother's Name</label>
+                            <input type="text" id="mother_name" name="mother_name" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="position" class="required">Position</label>
+                            <input type="text" id="position" name="position" required>
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="qualification" class="required">Qualification</label>
+                            <input type="text" id="qualification" name="qualification" required>
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="experience" class="required">Experience (years)</label>
+                            <input type="number" id="experience" name="experience" step="0.1" min="0" required>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="date_of_joining" class="required">Date of Joining</label>
+                            <input type="date" id="date_of_joining" name="date_of_joining" required>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="btn" id="next-1">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Contact Information -->
+                <div class="form-step" id="form-step-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="phone" class="required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="other_phone_no">Other Phone Number</label>
+                            <input type="tel" id="other_phone_no" name="other_phone_no">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="gender" class="required">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <i class="fas fa-venus-mars"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="birthday" class="required">Birthday</label>
+                            <input type="date" id="birthday" name="birthday" required>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label for="address" class="required">Address</label>
+                            <textarea id="address" name="address" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="city" class="required">City</label>
+                            <input type="text" id="city" name="city" required>
+                            <i class="fas fa-city"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="state" class="required">State</label>
+                            <input type="text" id="state" name="state" required>
+                            <i class="fas fa-map-marked"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="state_code">State Code</label>
+                            <input type="text" id="state_code" name="state_code">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="country" class="required">Country</label>
+                            <select id="country" name="country" required>
+                                <option value="">Select Country</option>
+                                <option value="India">India</option>
+                                <option value="USA">USA</option>
+                                <option value="UK">UK</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Japan">Japan</option>
+                                <option value="China">China</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <i class="fas fa-globe"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button type="button" class="btn btn-prev" id="prev-2">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn" id="next-2">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Additional Information -->
+                <div class="form-step" id="form-step-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="category" class="required">Category</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Genral">General</option>
+                                <option value="BC(A)">BC(A)</option>
+                                <option value="BC(B)">BC(B)</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="nationality" class="required">Nationality</label>
+                            <select id="nationality" name="nationality" required>
+                                <option value="">Select Nationality</option>
+                                <option value="Indian">Indian</option>
+                                <option value="NRI">NRI</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <i class="fas fa-passport"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="religion" class="required">Religion</label>
+                            <select id="religion" name="religion" required>
+                                <option value="">Select Religion</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Christian">Christian</option>
+                                <option value="Jain">Jain</option>
+                                <option value="Buddhist">Buddhist</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <i class="fas fa-pray"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="adhar_no" class="required">Aadhar Number</label>
+                            <input type="number" id="adhar_no" name="adhar_no" required>
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="pan_no" class="required">PAN Number</label>
+                            <input type="text" id="pan_no" name="pan_no" required>
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="martial_status" class="required">Marital Status</label>
+                            <select id="martial_status" name="martial_status" required>
+                                <option value="">Select Status</option>
+                                <option value="married">Married</option>
+                                <option value="unmarried">Unmarried</option>
+                            </select>
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button type="button" class="btn btn-prev" id="prev-3">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-plus"></i> Add Admin
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form steps navigation
+            const formSteps = document.querySelectorAll('.form-step');
+            const steps = document.querySelectorAll('.step');
+            const nextBtn1 = document.getElementById('next-1');
+            const nextBtn2 = document.getElementById('next-2');
+            const prevBtn2 = document.getElementById('prev-2');
+            const prevBtn3 = document.getElementById('prev-3');
+            const form = document.getElementById('employee-form');
+            const progressBar = document.getElementById('progress-bar');
+            
+            let currentStep = 1;
+            const totalSteps = 3;
+            
+            // Update progress bar
+            function updateProgressBar() {
+                const progressWidth = ((currentStep - 1) / (totalSteps - 1)) * 100;
+                progressBar.style.setProperty('--progress-width', `${progressWidth}%`);
+                
+                steps.forEach((step, index) => {
+                    if (index < currentStep) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Show current step
+            function showStep(stepNumber) {
+                formSteps.forEach(step => {
+                    step.classList.remove('active');
+                });
+                document.getElementById(`form-step-${stepNumber}`).classList.add('active');
+                currentStep = stepNumber;
+                updateProgressBar();
+            }
+            
+            // Next and Previous buttons event listeners
+            nextBtn1.addEventListener('click', function() {
+                // Validate step 1
+                const requiredFields = document.querySelectorAll('#form-step-1 .required input, #form-step-1 .required select');
+                let valid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        valid = false;
+                        field.style.borderColor = '#e22';
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+                
+                if (valid) {
+                    showStep(2);
+                } else {
+                    alert('Please fill all required fields');
+                }
+            });
+            
+            nextBtn2.addEventListener('click', function() {
+                // Validate step 2
+                const requiredFields = document.querySelectorAll('#form-step-2 .required input, #form-step-2 .required select, #form-step-2 .required textarea');
+                let valid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        valid = false;
+                        field.style.borderColor = '#e22';
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+                
+                if (valid) {
+                    showStep(3);
+                } else {
+                    alert('Please fill all required fields');
+                }
+            });
+            
+            prevBtn2.addEventListener('click', function() {
+                showStep(1);
+            });
+            
+            prevBtn3.addEventListener('click', function() {
+                showStep(2);
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                // Validate step 3
+                const requiredFields = document.querySelectorAll('#form-step-3 .required input, #form-step-3 .required select');
+                let valid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        valid = false;
+                        field.style.borderColor = '#e22';
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+                
+                if (!valid) {
+                    e.preventDefault();
+                    alert('Please fill all required fields');
+                }
+            });
+            
+            // Initialize progress bar
+            updateProgressBar();
+        });
+    </script>
+</body>
+</html>
